@@ -22,8 +22,15 @@ func Ping(url string) chan struct{} {
 	return ch
 }
 
+const tenSecondTimeout = 10 * time.Second
+
 //Racer between 2 URL request
-func Racer(a, b string, timeout time.Duration) (winner string, err error) {
+func Racer(a, b string) (winner string, err error) {
+	return ConfigurableRacer(a, b, tenSecondTimeout)
+}
+
+//ConfigurableRacer between 2 URL request with custom timeout
+func ConfigurableRacer(a, b string, timeout time.Duration) (winner string, err error) {
 	select {
 	case <-Ping(a):
 		return a, nil
